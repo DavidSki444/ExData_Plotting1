@@ -1,0 +1,21 @@
+electricPowerConsumption <- read.table("household_power_consumption.txt", header = TRUE, sep=";", na.strings ="?")
+electricPowerConsumption$Time <- paste(electricPowerConsumption$Date, electricPowerConsumption$Time, sep=" ")
+electricPowerConsumption$Date <- as.Date(electricPowerConsumption$Date, "%d/%m/%Y")
+index <- electricPowerConsumption$Date == "2007-02-01" | electricPowerConsumption$Date == "2007-02-02"
+electricPowerConsumption <- electricPowerConsumption[index,]
+electricPowerConsumption$Time <- strptime(electricPowerConsumption$Time, "%d/%m/%Y %H:%M:%S")
+
+############################
+# Plot 4
+############################
+png(filename = "plot4.png",width = 480, height = 480)
+par(mfrow = c(2,2))
+with(electricPowerConsumption,plot(Time, Global_active_power, xlab = "", ylab="Global Active Power", type="l"))
+with(electricPowerConsumption,plot(Time, Voltage, xlab = "datetime", ylab="Global Active Power", type="l"))
+with(electricPowerConsumption,plot(Time, Sub_metering_1, xlab = "", ylab="Energy sub metering", type="l", col="violetred"))
+with(electricPowerConsumption,lines(Time, Sub_metering_2, col="red"))
+with(electricPowerConsumption,lines(Time, Sub_metering_3, col="blue"))
+legend("topright", lty=1, col = c("violetred", "red", "blue"), legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+with(electricPowerConsumption,plot(Time, Global_reactive_power, xlab = "datetime", ylab="Global_reactive_power", type="l"))
+dev.off()
+
